@@ -21,14 +21,34 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.HappyPaths
         }
         
         [Fact]
-        public void ShouldReturnOkObjectResult()
+        public async Task ShouldCallCustomerServiceToGetAllCustomers()
+        {
+            var sut = new Controllers.CustomerController(_mockCustomerService.Object);
+            
+            await sut.Get();
+            
+            _mockCustomerService.Verify(s => s.GetAll(), Times.Once);
+        }
+        
+        [Fact]
+        public void ShouldReturnOkObjectResultForSingleCustomer()
         {
             var dummyCustomerId = It.IsAny<string>();
             _mockCustomerService.Setup(s => s.GetById(dummyCustomerId))
-                .ReturnsAsync(new Models.Customer(string.Empty, string.Empty, string.Empty));
+                .ReturnsAsync(new Models.Customer(string.Empty, string.Empty, string.Empty, string.Empty));
             var sut = new Controllers.CustomerController(_mockCustomerService.Object);
             
             var result = sut.Get(dummyCustomerId).Result;
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+        
+        [Fact]
+        public void ShouldReturnOkObjectResultForMultipleCustomers()
+        {
+            var sut = new Controllers.CustomerController(_mockCustomerService.Object);
+            
+            var result = sut.Get().Result;
 
             Assert.IsType<OkObjectResult>(result);
         }
@@ -40,7 +60,8 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.HappyPaths
             const string validEmail = "test@test.com";
             const string validFirstName = "John";
             const string validSurname = "Surname";
-            var validCustomer = new Models.Customer(validEmail, validFirstName, validSurname);
+            const string validPassword = "Password123";
+            var validCustomer = new Models.Customer(validEmail, validFirstName, validSurname, validPassword);
             _mockCustomerService.Setup(s => s.GetById(customerId)).ReturnsAsync(validCustomer);
             var sut = new Controllers.CustomerController(_mockCustomerService.Object);
             

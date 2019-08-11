@@ -12,12 +12,26 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.SadPaths
         private readonly Mock<ICustomerService> _mockCustomerService = new Mock<ICustomerService>();
             
         [Fact]
-        public void ShouldReturnServerErrorIfExceptionThrown()
+        public void ShouldReturnInternalServerErrorIfExceptionThrownForSingleCustomer()
         {
             _mockCustomerService.Setup(s => s.GetById(It.IsAny<string>())).ThrowsAsync(new Exception());
             var sut = new Controllers.CustomerController(_mockCustomerService.Object);
 
             var result = sut.Get(It.IsAny<string>()).Result;
+            var statusCode = ((ObjectResult) result).StatusCode;
+                
+            Assert.IsType<ObjectResult>(result);
+            Assert.IsType<Exception>(((ObjectResult) result).Value);
+            Assert.Equal((int) HttpStatusCode.InternalServerError, statusCode);
+        }
+        
+        [Fact]
+        public void ShouldReturnInternalServerErrorIfExceptionThrownForMultipleCustomers()
+        {
+            _mockCustomerService.Setup(s => s.GetAll()).ThrowsAsync(new Exception());
+            var sut = new Controllers.CustomerController(_mockCustomerService.Object);
+
+            var result = sut.Get().Result;
             var statusCode = ((ObjectResult) result).StatusCode;
                 
             Assert.IsType<ObjectResult>(result);

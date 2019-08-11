@@ -15,12 +15,15 @@ namespace CarFinance.Api.Customer.Models
 
         public string Surname { get; set; }
 
+        public string Password { get; set; }
+
         [BsonConstructor]
-        public Customer(string email, string firstName, string surname)
+        public Customer(string email, string firstName, string surname, string password)
         {
             Email = email;
             FirstName = firstName;
             Surname = surname;
+            Password = password;
         }
     }
 }

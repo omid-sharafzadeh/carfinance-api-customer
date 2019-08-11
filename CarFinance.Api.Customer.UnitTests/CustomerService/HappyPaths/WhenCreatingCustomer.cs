@@ -9,11 +9,12 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
         private const string NewCustomerFirstName = "John";
         private const string NewCustomerSurname = "Clarkin";
         private const string NewCustomerEmail = "test@test.com";
+        private const string NewCustomerPassword = "Password123";
         
         [Fact]
         public void ShouldCallDatabaseToInsertCustomer()
         {
-            var newCustomer = new Models.Customer(NewCustomerEmail, NewCustomerFirstName, NewCustomerSurname);
+            var newCustomer = new Models.Customer(NewCustomerEmail, NewCustomerFirstName, NewCustomerSurname, NewCustomerPassword);
             var mockDatabase = new Mock<ICustomerDb>();
             var sut = new Services.CustomerService(mockDatabase.Object);
                     
@@ -25,7 +26,7 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
         [Fact]
         public void ShouldReturnCustomerWithTheSameEmailPassedIntoIt()
         {
-            var newCustomer = new Models.Customer(NewCustomerEmail, NewCustomerFirstName, NewCustomerSurname);
+            var newCustomer = new Models.Customer(NewCustomerEmail, NewCustomerFirstName, NewCustomerSurname, NewCustomerPassword);
             var mockDatabase = new Mock<ICustomerDb>();
             mockDatabase.Setup(db => db.Insert(newCustomer)).ReturnsAsync(newCustomer);
             var sut = new Services.CustomerService(mockDatabase.Object);

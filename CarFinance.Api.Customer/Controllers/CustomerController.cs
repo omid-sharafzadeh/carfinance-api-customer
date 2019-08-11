@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using CarFinance.Api.Customer.Services;
@@ -19,9 +20,17 @@ namespace CarFinance.Api.Customer.Controllers
         }
         
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var customer = await _customerService.GetAll();
+                return Ok(customer);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError, e);
+            }
         }
         
         [HttpGet("{id}")]

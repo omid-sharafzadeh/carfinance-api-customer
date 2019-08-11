@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CarFinance.Api.Customer.Data
@@ -6,5 +7,6 @@ namespace CarFinance.Api.Customer.Data
     {
         Task<Models.Customer> Insert(Models.Customer customer);
         Task<Models.Customer> GetById(string id);
+        Task<IEnumerable<Models.Customer>> GetAll();
     }
 }

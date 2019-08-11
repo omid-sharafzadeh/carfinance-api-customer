@@ -18,12 +18,24 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
         }
         
         [Fact]
+        public void ShouldCallDatabaseToGetAllCustomers()
+        {
+            var mockDatabase = new Mock<ICustomerDb>();
+            var sut = new Services.CustomerService(mockDatabase.Object);
+                    
+            sut.GetAll();
+                    
+            mockDatabase.Verify(db => db.GetAll(), Times.Once);
+        }
+        
+        [Fact]
         public void ShouldReturnTheSameCustomerWithTheSameEmail()
         {
             const string newCustomerEmail = "test@test.com";
             const string newCustomerFirstName = "John";
             const string newCustomerSurname = "Clarkin";
-            var existingCustomer = new Models.Customer(newCustomerEmail, newCustomerFirstName, newCustomerSurname);
+            const string newCustomerPassword = "Password123";
+            var existingCustomer = new Models.Customer(newCustomerEmail, newCustomerFirstName, newCustomerSurname, newCustomerPassword);
             var mockDatabase = new Mock<ICustomerDb>();
             mockDatabase.Setup(db => db.GetById(It.IsAny<string>())).ReturnsAsync(existingCustomer);
             var sut = new Services.CustomerService(mockDatabase.Object);

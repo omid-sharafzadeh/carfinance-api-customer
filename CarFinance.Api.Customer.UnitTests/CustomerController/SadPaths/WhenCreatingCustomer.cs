@@ -12,7 +12,8 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.SadPaths
         private const string ValidEmail = "test@test.com";
         private const string ValidFirstName = "John";
         private const string ValidSurname = "Clarkin";
-        private readonly Models.Customer _validCustomer = new Models.Customer(ValidEmail, ValidFirstName, ValidSurname);
+        private const string ValidPassword = "Password123";
+        private readonly Models.Customer _validCustomer = new Models.Customer(ValidEmail, ValidFirstName, ValidSurname, ValidPassword);
         private readonly Mock<ICustomerService> _mockCustomerService = new Mock<ICustomerService>();
             
         [Fact]

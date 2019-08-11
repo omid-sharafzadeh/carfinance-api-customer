@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
@@ -16,7 +17,12 @@ namespace CarFinance.Api.Customer.Data
         
         public async Task<Models.Customer> Insert(Models.Customer newCustomer)
         {
-            var customer = new Models.Customer(newCustomer.Email, newCustomer.FirstName, newCustomer.Surname);
+            var customer = new Models.Customer(
+                newCustomer.Email, 
+                newCustomer.FirstName, 
+                newCustomer.Surname, 
+                newCustomer.Password);
+            
             await _customers.InsertOneAsync(customer);
             return customer;
         }
@@ -25,6 +31,12 @@ namespace CarFinance.Api.Customer.Data
         {
             var customer = await _customers.FindAsync(c => c.Id.Equals(id));
             return customer.FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<Models.Customer>> GetAll()
+        {
+            var customers = await _customers.FindAsync(c => true);
+            return customers.ToList();
         }
     }
 }

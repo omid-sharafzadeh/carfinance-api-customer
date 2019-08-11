@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CarFinance.Api.Customer.Data;
 
@@ -20,6 +21,11 @@ namespace CarFinance.Api.Customer.Services
         public async Task<Models.Customer> GetById(string customerId)
         {
             return await _customerDb.GetById(customerId);
+        }
+
+        public async Task<IEnumerable<Models.Customer>> GetAll()
+        {
+            return await _customerDb.GetAll();
         }
     }
 }
