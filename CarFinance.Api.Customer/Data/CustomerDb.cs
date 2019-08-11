@@ -38,5 +38,15 @@ namespace CarFinance.Api.Customer.Data
             var customers = await _customers.FindAsync(c => true);
             return customers.ToList();
         }
+
+        public async Task Update(Models.Customer updatedCustomer)
+        { 
+            await _customers.ReplaceOneAsync(c => c.Id == updatedCustomer.Id, updatedCustomer);
+        }
+
+        public async Task Delete(Models.Customer customerToBeDeleted)
+        {
+            await _customers.DeleteOneAsync(c => c.Id == customerToBeDeleted.Id);
+        }
     }
 }

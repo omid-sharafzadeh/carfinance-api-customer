@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using CarFinance.Api.Customer.Services;
@@ -70,16 +68,43 @@ namespace CarFinance.Api.Customer.Controllers
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Models.Customer updatedCustomer)
         {
+            try
+            {
+                if (!ModelState.IsValid) 
+                    return BadRequest(ModelState);
+
+                var customerToBeUpdated = _customerService.GetById(updatedCustomer.Id);
+
+                if (customerToBeUpdated == null) return NotFound();
+                
+                await _customerService.Update(updatedCustomer);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError, e);
+            }
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            try
+            {
+                var customerToBeDeleted = await _customerService.GetById(id);
+
+                if (customerToBeDeleted == null) return NotFound();
+                
+                await _customerService.Delete(customerToBeDeleted);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError, e);
+            }
         }
     }
 }

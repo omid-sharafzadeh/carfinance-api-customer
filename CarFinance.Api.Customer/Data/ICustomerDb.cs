@@ -8,5 +8,7 @@ namespace CarFinance.Api.Customer.Data
         Task<Models.Customer> Insert(Models.Customer customer);
         Task<Models.Customer> GetById(string id);
         Task<IEnumerable<Models.Customer>> GetAll();
+        Task Update(Models.Customer updatedCustomer);
+        Task Delete(Models.Customer customerToBeDeleted);
     }
 }

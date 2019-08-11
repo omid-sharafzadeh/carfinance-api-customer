@@ -27,5 +27,15 @@ namespace CarFinance.Api.Customer.Services
         {
             return await _customerDb.GetAll();
         }
+
+        public async Task Update(Models.Customer updatedCustomer)
+        { 
+            await _customerDb.Update(updatedCustomer);
+        }
+
+        public async Task Delete(Models.Customer customerToBeDeleted)
+        {
+            await _customerDb.Delete(customerToBeDeleted);
+        }
     }
 }
