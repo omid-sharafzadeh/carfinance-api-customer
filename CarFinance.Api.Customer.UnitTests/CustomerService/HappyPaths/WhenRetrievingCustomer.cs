@@ -21,7 +21,9 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
         public void ShouldReturnTheSameCustomerWithTheSameEmail()
         {
             const string newCustomerEmail = "test@test.com";
-            var existingCustomer = new Models.Customer(newCustomerEmail);
+            const string newCustomerFirstName = "John";
+            const string newCustomerSurname = "Clarkin";
+            var existingCustomer = new Models.Customer(newCustomerEmail, newCustomerFirstName, newCustomerSurname);
             var mockDatabase = new Mock<ICustomerDb>();
             mockDatabase.Setup(db => db.GetById(It.IsAny<string>())).ReturnsAsync(existingCustomer);
             var sut = new Services.CustomerService(mockDatabase.Object);

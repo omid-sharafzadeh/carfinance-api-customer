@@ -16,7 +16,7 @@ namespace CarFinance.Api.Customer.Data
         
         public async Task<Models.Customer> Insert(Models.Customer newCustomer)
         {
-            var customer = new Models.Customer(newCustomer.Email);
+            var customer = new Models.Customer(newCustomer.Email, newCustomer.FirstName, newCustomer.Surname);
             await _customers.InsertOneAsync(customer);
             return customer;
         }

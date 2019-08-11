@@ -11,10 +11,16 @@ namespace CarFinance.Api.Customer.Models
 
         public string Email { get; set; }
 
+        public string FirstName { get; set; }
+
+        public string Surname { get; set; }
+
         [BsonConstructor]
-        public Customer(string email)
+        public Customer(string email, string firstName, string surname)
         {
             Email = email;
+            FirstName = firstName;
+            Surname = surname;
         }
     }
 }

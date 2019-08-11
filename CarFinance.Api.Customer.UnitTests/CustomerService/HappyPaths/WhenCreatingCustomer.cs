@@ -6,10 +6,14 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
 {
     public class WhenCreatingCustomer
     {
+        private const string NewCustomerFirstName = "John";
+        private const string NewCustomerSurname = "Clarkin";
+        private const string NewCustomerEmail = "test@test.com";
+        
         [Fact]
         public void ShouldCallDatabaseToInsertCustomer()
         {
-            var newCustomer = new Models.Customer("test@test.com");
+            var newCustomer = new Models.Customer(NewCustomerEmail, NewCustomerFirstName, NewCustomerSurname);
             var mockDatabase = new Mock<ICustomerDb>();
             var sut = new Services.CustomerService(mockDatabase.Object);
                     
@@ -21,15 +25,14 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
         [Fact]
         public void ShouldReturnCustomerWithTheSameEmailPassedIntoIt()
         {
-            const string newCustomerEmail = "test@test.com";
-            var newCustomer = new Models.Customer(newCustomerEmail);
+            var newCustomer = new Models.Customer(NewCustomerEmail, NewCustomerFirstName, NewCustomerSurname);
             var mockDatabase = new Mock<ICustomerDb>();
             mockDatabase.Setup(db => db.Insert(newCustomer)).ReturnsAsync(newCustomer);
             var sut = new Services.CustomerService(mockDatabase.Object);
             
             var actualNewCustomer = sut.Add(newCustomer).Result;
 
-            Assert.Equal(newCustomerEmail, actualNewCustomer.Email);
+            Assert.Equal(NewCustomerEmail, actualNewCustomer.Email);
         }
     }
 }

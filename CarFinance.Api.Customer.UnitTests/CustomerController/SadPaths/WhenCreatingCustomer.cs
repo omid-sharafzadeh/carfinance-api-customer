@@ -10,7 +10,9 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.SadPaths
     public class WhenCreatingCustomer
     {
         private const string ValidEmail = "test@test.com";
-        private readonly Models.Customer _validCustomer = new Models.Customer(ValidEmail);
+        private const string ValidFirstName = "John";
+        private const string ValidSurname = "Clarkin";
+        private readonly Models.Customer _validCustomer = new Models.Customer(ValidEmail, ValidFirstName, ValidSurname);
         private readonly Mock<ICustomerService> _mockCustomerService = new Mock<ICustomerService>();
             
         [Fact]

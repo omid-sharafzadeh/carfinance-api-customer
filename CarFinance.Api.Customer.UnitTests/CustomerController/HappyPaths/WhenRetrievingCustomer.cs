@@ -25,7 +25,7 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.HappyPaths
         {
             var dummyCustomerId = It.IsAny<string>();
             _mockCustomerService.Setup(s => s.GetById(dummyCustomerId))
-                .ReturnsAsync(new Models.Customer(string.Empty));
+                .ReturnsAsync(new Models.Customer(string.Empty, string.Empty, string.Empty));
             var sut = new Controllers.CustomerController(_mockCustomerService.Object);
             
             var result = sut.Get(dummyCustomerId).Result;
@@ -38,7 +38,9 @@ namespace CarFinance.Api.Customer.UnitTests.CustomerController.HappyPaths
         {
             var customerId = It.IsAny<string>(); 
             const string validEmail = "test@test.com";
-            var validCustomer = new Models.Customer(validEmail);
+            const string validFirstName = "John";
+            const string validSurname = "Surname";
+            var validCustomer = new Models.Customer(validEmail, validFirstName, validSurname);
             _mockCustomerService.Setup(s => s.GetById(customerId)).ReturnsAsync(validCustomer);
             var sut = new Controllers.CustomerController(_mockCustomerService.Object);
             
