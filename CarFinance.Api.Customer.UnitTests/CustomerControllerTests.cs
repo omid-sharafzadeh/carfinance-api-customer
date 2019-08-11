@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using CarFinance.Api.Customer.Controllers;
-using CarFinance.Api.Customer.Data;
+using CarFinance.Api.Customer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -12,28 +12,28 @@ namespace CarFinance.Api.Customer.UnitTests
     public class CustomerControllerTests
     {
         private const string ValidEmail = "test@test.com";
-        private  static readonly Models.Customer ValidCustomer = new Models.Customer(ValidEmail);
+        private static readonly Models.Customer ValidCustomer = new Models.Customer(ValidEmail);
 
         public class HappyPaths
         {
-            private static readonly Mock<ICustomerDb> MockDatabase = new Mock<ICustomerDb>();
+            private static readonly Mock<ICustomerService> MockCustomerService = new Mock<ICustomerService>();
             
             public class WhenCreatingCustomer
             {
                 [Fact]
                 public void ShouldCallDatabaseToInsertCustomer()
                 {
-                    var sut = new CustomerController(MockDatabase.Object);
+                    var sut = new CustomerController(MockCustomerService.Object);
                     
                     sut.Post(ValidCustomer);
                     
-                    MockDatabase.Verify(db => db.Insert(ValidCustomer), Times.Once);
+                    MockCustomerService.Verify(s => s.Add(ValidCustomer), Times.Once);
                 }
                 
                 [Fact]
                 public void ShouldReturnCreatedResult()
                 {
-                    var sut = new CustomerController(MockDatabase.Object);
+                    var sut = new CustomerController(MockCustomerService.Object);
 
                     var result = sut.Post(ValidCustomer).Result;
 
@@ -43,8 +43,8 @@ namespace CarFinance.Api.Customer.UnitTests
                 [Fact]
                 public void ShouldReturnCustomerWithTheSameEmailPassedIntoIt()
                 {
-                    MockDatabase.Setup(db => db.Insert(ValidCustomer)).ReturnsAsync(ValidCustomer);
-                    var sut = new CustomerController(MockDatabase.Object);
+                    MockCustomerService.Setup(s => s.Add(ValidCustomer)).ReturnsAsync(ValidCustomer);
+                    var sut = new CustomerController(MockCustomerService.Object);
 
                     var result = sut.Post(ValidCustomer).Result;
 
@@ -57,15 +57,15 @@ namespace CarFinance.Api.Customer.UnitTests
 
         public class SadPaths
         {
-            private static readonly Mock<ICustomerDb> MockDatabase = new Mock<ICustomerDb>();
+            private static readonly Mock<ICustomerService> MockCustomerService = new Mock<ICustomerService>();
             
             public class WhenCreatingCustomer
             {
                 [Fact]
                 public void ShouldReturnServerErrorIfDbThrowsException()
                 {
-                    MockDatabase.Setup(db => db.Insert(ValidCustomer)).ThrowsAsync(new Exception());
-                    var sut = new CustomerController(MockDatabase.Object);
+                    MockCustomerService.Setup(s => s.Add(ValidCustomer)).ThrowsAsync(new Exception());
+                    var sut = new CustomerController(MockCustomerService.Object);
 
                     var result = sut.Post(ValidCustomer).Result;
                     var statusCode = ((StatusCodeResult) result).StatusCode;
@@ -77,8 +77,8 @@ namespace CarFinance.Api.Customer.UnitTests
                 [Fact]
                 public void ShouldReturnBadRequestIfModelStateIsInvalid()
                 {
-                    MockDatabase.Setup(db => db.Insert(ValidCustomer));
-                    var sut = new CustomerController(MockDatabase.Object);
+                    MockCustomerService.Setup(s => s.Add(ValidCustomer));
+                    var sut = new CustomerController(MockCustomerService.Object);
                     sut.ModelState.AddModelError(string.Empty, string.Empty);
 
                     var result = sut.Post(ValidCustomer).Result;

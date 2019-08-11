@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using CarFinance.Api.Customer.Data;
+using CarFinance.Api.Customer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarFinance.Api.Customer.Controllers
@@ -11,11 +11,11 @@ namespace CarFinance.Api.Customer.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerDb _customerDb;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(ICustomerDb customerDb)
+        public CustomerController(ICustomerService customerService)
         {
-            _customerDb = customerDb;
+            _customerService = customerService;
         }
 
         // GET api/values
@@ -40,7 +40,7 @@ namespace CarFinance.Api.Customer.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
                 
-                var createdCustomer = await _customerDb.Insert(customer);
+                var createdCustomer = await _customerService.Add(customer);
                 return Created("", createdCustomer);
             }
             catch (Exception e)

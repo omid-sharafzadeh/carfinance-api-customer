@@ -1,4 +1,5 @@
 ﻿using CarFinance.Api.Customer.Data;
+using CarFinance.Api.Customer.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,7 @@ namespace CarFinance.Api.Customer
             ConfigureDbSettings(services);
 
             services.AddSingleton<ICustomerDb, CustomerDb>();
+            services.AddScoped<ICustomerService, CustomerService>();
         }
 
         private void ConfigureDbSettings(IServiceCollection services)
