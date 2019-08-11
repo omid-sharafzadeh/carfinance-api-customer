@@ -16,5 +16,10 @@ namespace CarFinance.Api.Customer.Services
         {
             return await _customerDb.Insert(newCustomer);
         }
+
+        public async Task<Models.Customer> GetById(string customerId)
+        {
+            return await _customerDb.GetById(customerId);
+        }
     }
 }

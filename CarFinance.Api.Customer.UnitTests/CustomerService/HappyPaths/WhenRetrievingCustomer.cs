@@ -1,0 +1,34 @@
+using CarFinance.Api.Customer.Data;
+using Moq;
+using Xunit;
+
+namespace CarFinance.Api.Customer.UnitTests.CustomerService.HappyPaths
+{
+    public class WhenRetrievingCustomer
+    {
+        [Fact]
+        public void ShouldCallDatabaseToGetCustomerById()
+        {
+            var mockDatabase = new Mock<ICustomerDb>();
+            var sut = new Services.CustomerService(mockDatabase.Object);
+                    
+            sut.GetById(It.IsAny<string>());
+                    
+            mockDatabase.Verify(db => db.GetById(It.IsAny<string>()), Times.Once);
+        }
+        
+        [Fact]
+        public void ShouldReturnTheSameCustomerWithTheSameEmail()
+        {
+            const string newCustomerEmail = "test@test.com";
+            var existingCustomer = new Models.Customer(newCustomerEmail);
+            var mockDatabase = new Mock<ICustomerDb>();
+            mockDatabase.Setup(db => db.GetById(It.IsAny<string>())).ReturnsAsync(existingCustomer);
+            var sut = new Services.CustomerService(mockDatabase.Object);
+            
+            var actualNewCustomer = sut.GetById(It.IsAny<string>()).Result;
+
+            Assert.Equal(newCustomerEmail, actualNewCustomer.Email);
+        }
+    }
+}

@@ -8,8 +8,8 @@ namespace CarFinance.Api.Customer.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        
-        public string Email { get; private set; }
+
+        public string Email { get; set; }
 
         [BsonConstructor]
         public Customer(string email)

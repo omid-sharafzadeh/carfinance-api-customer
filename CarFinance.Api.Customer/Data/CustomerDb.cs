@@ -11,7 +11,6 @@ namespace CarFinance.Api.Customer.Data
         {
             var client = new MongoClient(customerDbSettings.ConnectionString);
             var database = client.GetDatabase(customerDbSettings.DatabaseName);
-
             _customers = database.GetCollection<Models.Customer>(customerDbSettings.CollectionName);
         }
         
@@ -20,6 +19,12 @@ namespace CarFinance.Api.Customer.Data
             var customer = new Models.Customer(newCustomer.Email);
             await _customers.InsertOneAsync(customer);
             return customer;
+        }
+
+        public async Task<Models.Customer> GetById(string id)
+        {
+            var customer = await _customers.FindAsync(c => c.Id.Equals(id));
+            return customer.FirstOrDefault();
         }
     }
 }

@@ -17,19 +17,31 @@ namespace CarFinance.Api.Customer.Controllers
         {
             _customerService = customerService;
         }
-
-        // GET api/values
+        
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
         }
-
-        // GET api/values/5
+        
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
-            return "value";
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+                
+                var customer = await _customerService.GetById(id);
+
+                if (customer == null) return NotFound(id);
+                return Ok(customer);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError, e);
+            }
+            
         }
 
         [HttpPost]
@@ -45,7 +57,7 @@ namespace CarFinance.Api.Customer.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode((int) HttpStatusCode.InternalServerError);
+                return StatusCode((int) HttpStatusCode.InternalServerError, e);
             }
         }
 
