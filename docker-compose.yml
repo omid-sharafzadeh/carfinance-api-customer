@@ -1,0 +1,15 @@
+version: '3.1'
+
+services: 
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+  car-finance:
+    image: car-finance
+    restart: always
+    ports:
+      - 5050:5000
+    depends_on:
+      - mongodb
